@@ -6,13 +6,13 @@
 /*   By: ymakhlou <ymakhlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 17:21:54 by ymakhlou          #+#    #+#             */
-/*   Updated: 2023/12/05 13:02:37 by ymakhlou         ###   ########.fr       */
+/*   Updated: 2023/12/06 00:00:16 by ymakhlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static int	ft_strlen(char *buff)
+int	ft_strlen(char *buff)
 {
 	int	count;
 
@@ -22,7 +22,7 @@ static int	ft_strlen(char *buff)
 	return (count);
 }
 
-static char	*ft_strchr(char *buff, int c)
+char	*ft_strchr(char *buff, int c)
 {
 	int	i;
 
@@ -33,22 +33,22 @@ static char	*ft_strchr(char *buff, int c)
 			return ((char *)buff + i);
 		i++;
 	}
-	return (NULL);
+	return (NULL); 
 }
-
-static char	*read_line(int fd, char *buff)
+# include <stdlib.h>
+# include <strings.h>
+char	*read_line(int fd, char *st)
 {
-	char	*stock;
+	char		*buff;
 	int		read_count;
 
 	read_count = 1;
+	buff = NULL;
 	buff = (char *) malloc (BUFFER_SIZE + 1);
-	if (!BUFFER_SIZE)
+	if (!buff)
 		return (NULL);
-	stock = (char *) malloc (1);
-	if (!stock)
-		return (NULL);
-	stock[0] = '\0';
+	memset(buff, 0, BUFFER_SIZE + 1);
+	printf("buffff [%s]\n", buff);
 	while ((read_count != 0) && (ft_strchr(buff, '\n') == NULL))
 	{
 		read_count = read(fd, buff, BUFFER_SIZE);
@@ -58,32 +58,38 @@ static char	*read_line(int fd, char *buff)
 			return (NULL);
 		}
 		buff[read_count] = '\0';
-		stock = strjoin(stock, buff);
+		st = ft_strjoin(st, buff);//leak
+		printf("walid %s\n",st);
 	}
-	return (stock);
+	free(buff);
+	buff = NULL;
+	return (st);
 }
 
 char	*get_next_line(int fd)
 {
-	char		*buff;
 	static char	*stock;
 	char		*line;
 
+	if (!stock)
+		stock = "";
 	if (fd < 0 && BUFFER_SIZE <= 0)
 		return (NULL);
-	stock = read_line(fd, *buff);
+	stock = read_line(fd, stock);
+	printf("stock1 ==> [%s]\n", stock);
 	line = line_to_return(stock);
-	// line = (char *) malloc ();
-	// return (NULL);
+	printf("stock2 ==> [%s]\n", stock);
+	stock = modify_static(stock, line);
+	return (line);
 }
-// int main (void)
-// {
-// 	int fd = open("file", O_CREAT | O_WRONLY, 0777);
-// 	write(fd, "hello t\nhere\n", 12);
-// 	close(fd);
-// 	fd = open("file", O_RDONLY); // Reopen the file in read mode/////it wasnt printing buffer because of these 3 lines
-//     printf("get_next_line is    %s\n",get_next_line(fd));
-// 	printf("%s\n",get_next_line(fd));
-// 	//printf("%s",get_next_line(fd));
-// 	close(fd);
-// }
+int main (void)
+{
+	int fd = open("file", O_CREAT | O_WRONLY, 0777);
+	write(fd, "hello t\nhere\n", 12);
+	close(fd);
+	fd = open("file", O_RDONLY); // Reopen the file in read mode/////it wasnt printing buffer because of these 3 lines
+    printf("-------->%s \n",get_next_line(fd));
+	printf("-------->%s",get_next_line(fd));
+	printf("-------->%s",get_next_line(fd));
+	close(fd);
+}
