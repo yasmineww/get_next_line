@@ -6,7 +6,7 @@
 /*   By: ymakhlou <ymakhlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 17:22:47 by ymakhlou          #+#    #+#             */
-/*   Updated: 2023/12/05 23:30:48 by ymakhlou         ###   ########.fr       */
+/*   Updated: 2023/12/07 00:18:04 by ymakhlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define GET_NEXT_LINE_H
 
 #ifndef		BUFFER_SIZE
-# define	BUFFER_SIZE 10
+# define	BUFFER_SIZE 3
 #endif
 
 # include <stdlib.h>
