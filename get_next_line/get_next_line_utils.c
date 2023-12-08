@@ -6,13 +6,13 @@
 /*   By: ymakhlou <ymakhlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 23:25:04 by ymakhlou          #+#    #+#             */
-/*   Updated: 2023/12/07 00:41:28 by ymakhlou         ###   ########.fr       */
+/*   Updated: 2023/12/07 16:55:03 by ymakhlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_strdup(char *stock)
+char	*my_strdup(char *stock)
 {
 	int		i;
 	int		len;
@@ -37,7 +37,7 @@ char	*modify_static(char *stock, char *line)
 
 	if (!stock || stock[0] == '\0')
 		return (free(stock), NULL);
-	temp = ft_strdup(stock);
+	temp = my_strdup(stock);
 	if (!temp)
 	{
 		free(line);

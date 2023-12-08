@@ -6,12 +6,10 @@
 /*   By: ymakhlou <ymakhlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 17:21:54 by ymakhlou          #+#    #+#             */
-/*   Updated: 2023/12/07 00:28:12 by ymakhlou         ###   ########.fr       */
+/*   Updated: 2023/12/08 00:22:21 by ymakhlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <strings.h>
 #include "get_next_line.h"
 
 int	ft_strlen(char *buff)
@@ -88,17 +86,12 @@ char	*read_line(int fd, char *stock)
 	free(buff);
 	return (stock);
 }
-// void f()
-// {
-// 	system("leaks a.out");
-// }
 
 char	*get_next_line(int fd)
 {
 	static char	*stock;
 	char		*line;
 
-	//atexit(f);
 	if (!stock)
 	{
 		stock = (char *) malloc (1);
@@ -114,18 +107,20 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-// int main (void)
-// {
-// 	int fd = open("file", O_CREAT | O_RDONLY, 0777);
-// 	// write(fd, "hello t\nhere\nhhhhhh \n 88", 24);
-// 	// close(fd);
-// 	// fd = open("file", O_RDONLY); // Reopen the file in read mode/////it wasnt printing buffer because of these 3 lines
-// 	close(fd);
-//     printf("%s",get_next_line(fd));
-// 	printf("%s",get_next_line(fd));
-// 	printf("%s",get_next_line(fd));
-// 	printf("%s",get_next_line(fd));
-// 	printf("%s",get_next_line(fd));
-// 	printf("%s",get_next_line(fd));
-// 	close(fd);
-// }
+int main (void)
+{
+	int fd = open("file", O_CREAT | O_RDONLY, 0777);
+	// write(fd, "hello t\nhere\nhhhhhh \n 88", 24);
+	// close(fd);
+	// fd = open("file", O_RDONLY); // Reopen the file in read mode/////it wasnt printing buffer because of these 3 lines
+	// close(fd);
+	char *s = get_next_line(fd);
+	while (s != NULL)
+	{
+    	printf("%s", s);
+		free(s);
+		s = get_next_line(fd);
+	}
+    printf("%s", s);
+	close(fd);
+}
