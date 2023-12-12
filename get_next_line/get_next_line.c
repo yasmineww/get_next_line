@@ -6,7 +6,7 @@
 /*   By: ymakhlou <ymakhlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 17:21:54 by ymakhlou          #+#    #+#             */
-/*   Updated: 2023/12/08 00:22:21 by ymakhlou         ###   ########.fr       */
+/*   Updated: 2023/12/12 15:41:31 by ymakhlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ char	*read_line(int fd, char *stock)
 	int		read_count;
 
 	read_count = 1;
-	buff = (char *) malloc (BUFFER_SIZE + 1);
+	buff = (char *) malloc ((size_t)BUFFER_SIZE + 1);
 	if (!buff)
 		return (NULL);
 	buff[0] = '\0';
@@ -92,6 +92,8 @@ char	*get_next_line(int fd)
 	static char	*stock;
 	char		*line;
 
+	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE > INT_MAX || fd > OPEN_MAX)
+		return (free(stock), stock = NULL, NULL);
 	if (!stock)
 	{
 		stock = (char *) malloc (1);
@@ -99,8 +101,6 @@ char	*get_next_line(int fd)
 			return (NULL);
 		*stock = '\0';
 	}
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (free(stock), stock = NULL, NULL);
 	stock = read_line(fd, stock);
 	line = line_to_return(stock);
 	stock = modify_static(stock, line);
@@ -109,18 +109,18 @@ char	*get_next_line(int fd)
 
 int main (void)
 {
-	int fd = open("file", O_CREAT | O_RDONLY, 0777);
-	// write(fd, "hello t\nhere\nhhhhhh \n 88", 24);
-	// close(fd);
-	// fd = open("file", O_RDONLY); // Reopen the file in read mode/////it wasnt printing buffer because of these 3 lines
-	// close(fd);
-	char *s = get_next_line(fd);
+	int		fd = open("file1", O_CREAT | O_RDWR, 0777);
+	char	*s;
+
+	write(fd, "hello \n hey there", 17); //writing in the file
+	close (fd);
+	fd = open("file1", O_RDONLY, 0777); //reinitializing fd so it points to the beginning of the file
+	s = get_next_line(fd);
 	while (s != NULL)
 	{
-    	printf("%s", s);
-		free(s);
-		s = get_next_line(fd);
+		printf("%s", s);
+		free(s); //avoiding leaks
+		s = get_next_line(fd); //incrementing, getting next_line
 	}
-    printf("%s", s);
-	close(fd);
+	close (fd);
 }

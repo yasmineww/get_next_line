@@ -6,7 +6,7 @@
 /*   By: ymakhlou <ymakhlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 17:28:31 by ymakhlou          #+#    #+#             */
-/*   Updated: 2023/12/08 01:23:13 by ymakhlou         ###   ########.fr       */
+/*   Updated: 2023/12/12 15:53:10 by ymakhlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ char	*read_line(int fd, char *stock)
 	int		read_count;
 
 	read_count = 1;
-	buff = (char *) malloc (BUFFER_SIZE + 1);
+	buff = (char *) malloc ((size_t)BUFFER_SIZE + 1);
 	if (!buff)
 		return (NULL);
 	buff[0] = '\0';
@@ -92,7 +92,7 @@ char	*get_next_line(int fd)
 	static char	*stock[OPEN_MAX];
 	char		*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE > INT_MAX || fd > OPEN_MAX)
 		return (NULL);
 	if (!stock[fd])
 	{
@@ -109,35 +109,30 @@ char	*get_next_line(int fd)
 
 int main (void)
 {
-	int fd = open("my file", O_CREAT |O_RDONLY, 0777);
-	int fd2 = open("my file2", O_CREAT | O_RDONLY, 0777);
-	int arr[2] = {fd, fd2};
-	int i;
-	char *s; 
+	int		fd1 = open("file1", O_CREAT | O_RDWR, 0777);
+	int		fd2 = open("file2", O_CREAT | O_RDWR, 0777);
+	int		arr[2] = {fd1, fd2};
+	char	*s;
+	int		i;
 
+	write(fd1, "hello \n hey there ", 18); 
+	write(fd2, "are you \n good?", 15); 
+	close (fd1);
+	close (fd2);
+	fd1 = open("file1", O_RDONLY, 0777); 
+	fd2 = open("file2", O_RDONLY, 0777);
 	i = 0;
-	//char *s = get_next_line(fd);
-
-	// printf("file 1 fiiih ----> %s", s);
-	// free(s);
-	// s = get_next_line(fd2);
-	// printf("file 2 fiiih ----> %s", s);
-	// free(s);
-	// s = get_next_line(fd);
-	// printf("file 1 fiiih ----> %s", s);
-	// free(s);
-	// close(fd);
 	while (i < 2)
 	{
-		s = get_next_line(arr[i]);
+		s = get_next_line(arr[i % 2]);
 		while (s != NULL)
 		{
-    		printf("%s", s);
-			free(s);
-			s = get_next_line(arr[i]);
+			printf("%s", s);
+			free(s); 
+			s = get_next_line(arr[i % 2]);
 		}
 		i++;
 	}
-    printf("%s", s);
-	close(fd);
+	close (fd1);
+	close (fd2);
 }

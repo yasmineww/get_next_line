@@ -6,7 +6,7 @@
 /*   By: ymakhlou <ymakhlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 23:25:04 by ymakhlou          #+#    #+#             */
-/*   Updated: 2023/12/07 16:55:03 by ymakhlou         ###   ########.fr       */
+/*   Updated: 2023/12/12 15:38:39 by ymakhlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*modify_static(char *stock, char *line)
 	char	*temp;
 
 	if (!stock || stock[0] == '\0')
-		return (free(stock), NULL);
+		return (free(stock), stock = NULL, NULL);
 	temp = my_strdup(stock);
 	if (!temp)
 	{

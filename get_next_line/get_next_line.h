@@ -6,7 +6,7 @@
 /*   By: ymakhlou <ymakhlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 17:22:47 by ymakhlou          #+#    #+#             */
-/*   Updated: 2023/12/08 00:10:43 by ymakhlou         ###   ########.fr       */
+/*   Updated: 2023/12/12 15:38:54 by ymakhlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdio.h>
+# include <limits.h>
 
 char	*get_next_line(int fd);
 char	*read_line(int fd, char *st);
